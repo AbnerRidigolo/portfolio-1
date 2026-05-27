@@ -1,4 +1,5 @@
 import { useScrollReveal } from '../hooks/useScrollReveal'
+import { scrollToTop } from '../hooks/useLenis'
 
 const navLinks = [
   { label: 'Serviços', href: '#services' },
@@ -90,9 +91,13 @@ export default function Footer() {
           <span className="text-[11px] text-white/22 font-light">
             © 2026 Abner Ridigolo. Todos os direitos reservados.
           </span>
-          <a href="#" className="text-[11px] tracking-[0.1em] uppercase text-white/28 hover:text-white transition-colors duration-300">
+          <button
+            type="button"
+            onClick={() => scrollToTop(false)}
+            className="text-[11px] tracking-[0.1em] uppercase text-white/28 hover:text-white transition-colors duration-300"
+          >
             Voltar ao topo ↑
-          </a>
+          </button>
         </div>
 
       </div>

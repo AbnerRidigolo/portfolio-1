@@ -14,7 +14,6 @@
     overflow-x: hidden;
   }
   ::selection { background: #c8ff00; color: #000; }
-  @media (pointer: fine) { *, *::before, *::after { cursor: none !important; } }
   ::-webkit-scrollbar { width: 2px; }
   ::-webkit-scrollbar-track { background: #000; }
   ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 99px; }
