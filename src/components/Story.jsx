@@ -126,32 +126,13 @@ export default function Story() {
           {/* Story text */}
           <div className="flex flex-col gap-6 pt-0 md:pt-4" ref={textRef}>
             <p data-story-reveal className="text-[clamp(1rem,1.5vw,1.15rem)] leading-[1.85] text-white/70 font-light">
-              Tudo começou com uma planilha que ninguém conseguia entender.
-              No meu primeiro estágio, assumi a tarefa de "organizar uns dados" —
-              e o que parecia simples virou uma obsessão. Escrevi meu primeiro
-              script Python, automatizei 40 horas de trabalho manual por mês e,
-              naquele momento, entendi que dados não são só números: são decisões.
-            </p>
-
-            <p data-story-reveal className="text-[15px] leading-[1.85] text-white/50 font-light">
-              De lá pra cá, construí pipelines que processam centenas de milhões
-              de eventos por dia, treinei modelos que previram churn antes que os
-              clientes soubessem que estavam insatisfeitos, e implantei LLMs que
-              automaram processos que ninguém acreditava que seriam possíveis
-              automatizar.
-            </p>
-
-            <p data-story-reveal className="text-[15px] leading-[1.85] text-white/50 font-light">
-              Mas o que realmente me move não é a tecnologia em si — é aquele
-              momento em que um gestor olha para um dashboard e diz: "agora eu
-              entendo o meu negócio". Transformar complexidade em clareza é o que
-              define meu trabalho.
-            </p>
-
-            <p data-story-reveal className="text-[15px] leading-[1.85] text-white/50 font-light">
-              Hoje atendo empresas B2B que querem escalar com dados e IA —
-              sem achismos, sem promessas vazias. Só engenharia sólida,
-              estratégia clara e resultado mensurável.
+              Sou um jovem de 19 que possui experiência em diversas áreas e
+              trabalho integrando-as para obter uma visão abrangente e holística
+              no desenvolvimento de processos, visando a execução das atividades
+              com a máxima excelência. Acredito que a inovação é o pilar
+              essencial para o progresso. Por isso, busco superar expectativas,
+              propondo soluções verdadeiramente disruptivas e eficientes,
+              pensando fora da caixa.
             </p>
 
             <a

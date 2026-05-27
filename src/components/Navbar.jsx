@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { gsap } from 'gsap'
 
 const navLinks = [
-  { label: 'Sobre',    to: '/#story',    type: 'hash' },
+  { label: 'Sobre mim', to: '/#story',    type: 'hash' },
   { label: 'Projetos', to: '/projetos',  type: 'route' },
   { label: 'Serviços', to: '/#services', type: 'hash' },
   { label: 'Ask AI',   to: '/chat',      type: 'route' },

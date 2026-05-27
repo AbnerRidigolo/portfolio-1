@@ -105,7 +105,7 @@ export default function ChatPage() {
             ))}
           </div>
           <span className="mt-auto text-[10px] tracking-[0.12em] uppercase text-white/25">
-            Powered by Agno + Gemini
+            Powered by NVIDIA NIM
           </span>
         </aside>
 
