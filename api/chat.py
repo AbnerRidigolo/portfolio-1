@@ -1,9 +1,9 @@
 """
-Função serverless do Vercel — chatbot do portfólio (Google Gemini, free tier).
+Função serverless do Vercel — chatbot do portfólio (NVIDIA NIM / OpenAI-compatible API).
 Endpoint: POST /api/chat   body: { "messages": [{ "role": "user"|"assistant", "content": "..." }] }
 Resposta: { "reply": "..." }
 
-A chave do Gemini fica em variável de ambiente (GEMINI_API_KEY) no Vercel — nunca no browser.
+A chave NVIDIA fica em variável de ambiente (NVIDIA_API_KEY) no Vercel — nunca no browser.
 Stateless: o histórico da conversa é enviado pelo cliente a cada requisição.
 """
 import json
@@ -11,10 +11,9 @@ import os
 import time
 from http.server import BaseHTTPRequestHandler
 
-from google import genai
-from google.genai import types
+from openai import OpenAI
 
-MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+MODEL = os.environ.get("NVIDIA_MODEL", "meta/llama-3.3-70b-instruct")
 MAX_TOKENS = 1000
 BUSY_REPLY = (
     "Estou com bastante demanda agora 😅 e não consegui gerar a resposta. "
@@ -122,41 +121,42 @@ Comercial, Marketing, Financeiro, Fintech, Startup, Varejo.
 """
 
 
-def _build_contents(messages):
-    """Converte o histórico do cliente em contents do Gemini, normalizando papéis."""
-    contents = []
+def _build_messages(messages):
+    """Converte o histórico do cliente no formato OpenAI-compatible."""
+    result = [{"role": "system", "content": SYSTEM_PROMPT}]
     for m in messages or []:
-        role = "model" if (m.get("role") == "assistant") else "user"
+        role = m.get("role", "user")
+        if role not in ("user", "assistant"):
+            role = "user"
         text = (m.get("content") or "").strip()
-        if not text:
-            continue
-        contents.append(types.Content(role=role, parts=[types.Part.from_text(text=text)]))
-    # Gemini exige que o histórico comece com um turno do usuário
-    while contents and contents[0].role == "model":
-        contents.pop(0)
-    return contents
+        if text:
+            result.append({"role": role, "content": text})
+    return result
 
 
 def generate_reply(messages):
-    api_key = os.environ.get("GEMINI_API_KEY")
+    api_key = os.environ.get("NVIDIA_API_KEY")
     if not api_key:
-        return "O servidor não está configurado (falta GEMINI_API_KEY)."
+        return "O servidor não está configurado (falta NVIDIA_API_KEY)."
 
-    contents = _build_contents(messages)
-    if not contents:
+    msgs = _build_messages(messages)
+    if len(msgs) <= 1:  # apenas o system prompt, sem mensagem do usuário
         return "Pode mandar sua pergunta? 🙂"
 
-    client = genai.Client(api_key=api_key)
-    config = types.GenerateContentConfig(
-        system_instruction=SYSTEM_PROMPT,
-        max_output_tokens=MAX_TOKENS,
+    client = OpenAI(
+        base_url="https://integrate.api.nvidia.com/v1",
+        api_key=api_key,
     )
 
-    # Retry para erros temporários do provedor (503 high demand / 429).
+    # Retry para erros temporários do provedor (503 / 429).
     for attempt in range(3):
         try:
-            resp = client.models.generate_content(model=MODEL, contents=contents, config=config)
-            text = (getattr(resp, "text", None) or "").strip()
+            resp = client.chat.completions.create(
+                model=MODEL,
+                messages=msgs,
+                max_tokens=MAX_TOKENS,
+            )
+            text = (resp.choices[0].message.content or "").strip()
             if text:
                 return text
         except Exception:
